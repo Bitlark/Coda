@@ -1,6 +1,13 @@
 // 请求
 async function request(arg) {
-  return null
+  return 10000
+}
+
+// 延时
+const waiting = function (waitTime) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(resolve, waitTime);
+  })
 }
 
 // 尝试重连
@@ -19,13 +26,9 @@ async function tryConnect(arg) {
       console.log(`尝试第${count}次,参数:${arg},结果:${anwser}`)
       if (!anwser) {
         //进入尝试
-        return await new Promise((resolve, reject) => {
-          setTimeout(async () => {
-            count += 1;
-            const delayAns = await letTry(arg);
-            resolve(delayAns)
-          }, 1000)
-        })
+        await waiting(1000);
+        count += 1;
+        return await letTry(arg);
       }
       return anwser;
     } catch (err) {
